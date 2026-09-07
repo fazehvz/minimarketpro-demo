@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MinimarketPro — Demo comercial</title>
+<style>
+:root{--blue:#2457d6;--blue2:#eaf0ff;--ink:#142033;--muted:#6c788c;--bg:#f5f7fb;--card:#fff;--line:#e5e9f1;--ok:#16834b;--warn:#c77800;--danger:#c93645;--shadow:0 8px 25px rgba(25,42,70,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.app{display:flex;min-height:100vh}
+.side{width:245px;background:#fff;border-right:1px solid var(--line);padding:20px 12px;position:fixed;inset:0 auto 0 0;overflow:auto}
+.brand{font-size:23px;font-weight:800;padding:8px 12px 24px}.brand span{color:var(--blue)}
+.demo{margin:0 10px 18px;padding:10px 12px;background:#f1f5ff;border:1px solid #dce5ff;border-radius:12px;font-size:12px;color:#48608c}
+.nav{display:grid;gap:4px}.nav button{background:transparent;text-align:left;padding:11px 12px;border-radius:10px;color:#41506a}.nav button:hover,.nav button.active{background:var(--blue2);color:var(--blue);font-weight:700}
+.main{margin-left:245px;width:calc(100% - 245px)}.top{height:65px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}
+.top small{color:var(--muted)}.content{padding:28px;max-width:1500px;margin:auto}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.head h1{margin:0;font-size:27px}.head p{margin:5px 0 0;color:var(--muted)}
+.primary{background:var(--blue);color:#fff;padding:11px 16px;border-radius:9px;font-weight:700}.secondary{background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:9px}.danger{background:#fff1f2;color:var(--danger);padding:9px 12px;border-radius:8px}
+.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}.cols2{grid-template-columns:1.45fr 1fr}.cols3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}.kpi .label{font-size:13px;color:var(--muted)}.kpi .num{font-size:25px;font-weight:800;margin-top:8px}.kpi .hint{font-size:12px;margin-top:7px;color:var(--ok)}
+.section-title{font-size:17px;font-weight:800;margin:0 0 14px}.row{display:flex;gap:10px;align-items:center}.between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.alert{padding:12px;border-radius:10px;margin-bottom:9px;background:#fff8ea}.alert strong{display:block}.alert small{color:var(--muted)}.alert.d{background:#fff0f2}.alert.o{background:#eef9f3}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px}.table th{color:var(--muted);font-weight:700}.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#eef2f8}.pill.ok{background:#eaf8f0;color:var(--ok)}.pill.warn{background:#fff3df;color:var(--warn)}.pill.bad{background:#ffedf0;color:var(--danger)}
+.bar{height:10px;background:#edf0f5;border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue);border-radius:8px}
+.search{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;outline:none}.search:focus{border-color:#aabcf4}
+.pos{display:grid;grid-template-columns:1.45fr .85fr;gap:16px}.products{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.product{border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px;text-align:left}.product:hover{border-color:#a9baf0;transform:translateY(-1px)}.product .name{font-weight:700}.product .meta{font-size:12px;color:var(--muted);margin:6px 0}.price{font-weight:800;font-size:18px}.cart-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.qty{display:flex;gap:5px;align-items:center}.qty button{width:27px;height:27px;border-radius:7px;background:#edf1f8}.totals{margin-top:15px;display:grid;gap:8px}.total{font-size:22px;font-weight:900}
+.chart{display:flex;align-items:end;gap:12px;height:190px;padding:10px 4px}.vbar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}.vbar i{width:100%;max-width:38px;border-radius:7px 7px 2px 2px;background:var(--blue)}.vbar span{font-size:11px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(12,22,40,.42);display:none;align-items:center;justify-content:center;z-index:20}.modal.show{display:flex}.modalbox{background:#fff;width:min(560px,92vw);border-radius:16px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.modalbox h3{margin-top:0}.choice{padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;display:flex;justify-content:space-between}.choice:hover{border-color:#9eb3ef;background:#f7f9ff}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select{padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.toast{position:fixed;right:22px;bottom:22px;background:#142033;color:#fff;padding:13px 16px;border-radius:10px;display:none;z-index:30;box-shadow:var(--shadow)}.toast.show{display:block}
+.feature{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.feature div{padding:12px;border:1px solid var(--line);border-radius:10px}.feature b{display:block;margin-bottom:4px}.muted{color:var(--muted)}.empty{padding:28px;text-align:center;color:var(--muted)}
+@media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.products{grid-template-columns:repeat(2,1fr)}.cols2,.pos{grid-template-columns:1fr}.side{width:210px}.main{margin-left:210px;width:calc(100% - 210px)}}
+@media(max-width:720px){.side{position:static;width:100%;height:auto}.app{display:block}.main{margin:0;width:100%}.top{padding:0 16px}.content{padding:16px}.kpis,.cols3,.products,.feature,.formgrid{grid-template-columns:1fr}.nav{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">Minimarket<span>Pro</span></div>
+  <div class="demo">DEMO COMERCIAL<br><b>Datos de prueba</b> · No afecta una tienda real</div>
+  <nav class="nav" id="nav">
+    <button data-page="inicio" class="active">⌂ &nbsp; Inicio</button>
+    <button data-page="vender">▣ &nbsp; Vender</button>
+    <button data-page="productos">▤ &nbsp; Productos</button>
+    <button data-page="inventario">▥ &nbsp; Inventario</button>
+    <button data-page="compras">↓ &nbsp; Compras</button>
+    <button data-page="proveedores">♙ &nbsp; Proveedores</button>
+    <button data-page="cuentas">S/ &nbsp; Por pagar</button>
+    <button data-page="promociones">◇ &nbsp; Promociones</button>
+    <button data-page="incidentes">! &nbsp; Incidencias</button>
+    <button data-page="reportes">◒ &nbsp; Reportes</button>
+    <button data-page="migracion">⇄ &nbsp; Migración</button>
+    <button data-page="configuracion">⚙ &nbsp; Configuración</button>
+    <button data-page="diferencias">★ &nbsp; Diferencias</button>
+  </nav>
+</aside>
+<main class="main">
+<header class="top"><div><b>Minimarket Central</b><br><small>Demo comercial · Operación simulada</small></div><div>Administrador ▾</div></header>
+<div class="content" id="view"></div>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox" id="modalbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const state={
+page:"inicio",cart:[],sales:18,stock:150,
+products:[
+{id:1,name:"Leche Gloria 1L",barcode:"7751271001012",price:4.90,stock:20,category:"Lácteos",lots:[["07/09/2026",8],["09/09/2026",12]]},
+{id:2,name:"Panetón 900g",barcode:"7750182009001",price:24.50,stock:7,category:"Panadería",lots:[["15/11/2026",7]]},
+{id:3,name:"Gaseosa Inca Kola 1.5L",barcode:"7750670001505",price:8.50,stock:18,category:"Bebidas",lots:[["20/10/2026",18]]},
+{id:4,name:"Arroz Costeño 1kg",barcode:"7751045001018",price:4.20,stock:35,category:"Abarrotes",lots:[["18/01/2027",35]]},
+{id:5,name:"Aceite Primor 1L",barcode:"7751295000101",price:9.80,stock:16,category:"Abarrotes",lots:[["11/12/2026",16]]},
+{id:6,name:"Atún Florida 170g",barcode:"7751026001704",price:6.90,stock:22,category:"Conservas",lots:[["03/03/2028",22]]},
+{id:7,name:"Huevos x15",barcode:"2000000000157",price:10.90,stock:12,category:"Frescos",lots:[["10/09/2026",12]]},
+{id:8,name:"Galleta Soda 6un",barcode:"7750111000060",price:3.50,stock:20,category:"Snacks",lots:[["22/02/2027",20]]}
+],
+suppliers:[
+{name:"Distribuidora Andina S.A.C.",ruc:"20601234567",phone:"999 111 222",debt:1840},
+{name:"Comercial La Central E.I.R.L.",ruc:"20598765431",phone:"988 333 444",debt:620},
+{name:"Abarrotes del Sur S.A.C.",ruc:"20455667788",phone:"977 555 666",debt:0}
+],
+incidents:[
+{product:"Leche Gloria 1L",lot:"07/09/2026",qty:2,reason:"Envase dañado",status:"Reportada"},
+{product:"Panetón 900g",lot:"15/11/2026",qty:1,reason:"Producto recibido equivocado",status:"En revisión"}
+],
+promos:[
+{name:"2x1 Galleta Soda",type:"2x1",status:"Activa"},
+{name:"Segundo Atún -20%",type:"Descuento",status:"Activa"},
+{name:"Combo desayuno",type:"Combo",status:"Programada"}
+],
+payables:[
+{supplier:"Distribuidora Andina S.A.C.",invoice:"F001-234",due:"08/09/2026",amount:1840,status:"Pendiente"},
+{supplier:"Comercial La Central E.I.R.L.",invoice:"F001-882",due:"12/09/2026",amount:620,status:"Pendiente"}
+]
+};
+
+const view=document.getElementById("view");
+const modal=document.getElementById("modal");
+const modalbox=document.getElementById("modalbox");
+const toastEl=document.getElementById("toast");
+
+function money(n){return "S/ "+n.toFixed(2)}
+function toast(t){toastEl.textContent=t;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),2400)}
+function setPage(p){state.page=p;document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));render()}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>setPage(b.dataset.page));
+
+function shell(title,sub,action=""){return `<div class="head"><div><h1>${title}</h1><p>${sub}</p></div>${action}</div>`}
+function card(content,cls="card"){return `<section class="${cls}">${content}</section>`}
+
+function render(){
+const p=state.page;
+const fn={inicio:home,vender:sell,productos:products,inventario:inventory,compras:purchases,proveedores:suppliers,cuentas:payables,promociones:promotions,incidentes:incidents,reportes:reports,migracion:migration,configuracion:settings,diferencias:differences}[p];
+view.innerHTML=fn();
+}
+
+function home(){
+return shell("Resumen del negocio","Todo lo importante de tu tienda, sin complicaciones.",`<button class="primary" onclick="setPage('vender')">+ Nueva venta</button>`)
++`<div class="grid kpis">
+${card(`<div class="kpi"><div class="label">Ventas de hoy</div><div class="num">S/ 486.30</div><div class="hint">↑ 12.4% vs. ayer</div></div>`)}
+${card(`<div class="kpi"><div class="label">Ventas realizadas</div><div class="num">${state.sales}</div><div class="hint">Operación normal</div></div>`)}
+${card(`<div class="kpi"><div class="label">Stock disponible</div><div class="num">${state.products.reduce((a,p)=>a+p.stock,0)}</div><div class="hint">Unidades registradas</div></div>`)}
+${card(`<div class="kpi"><div class="label">Por cobrar a clientes</div><div class="num">S/ 320.00</div><div class="hint">3 cuentas</div></div>`)}
+${card(`<div class="kpi"><div class="label">Atención requerida</div><div class="num">5</div><div class="hint" style="color:var(--warn)">Revisar hoy</div></div>`)}
+</div>
+<div class="grid cols2" style="margin-top:16px">
+${card(`<h3 class="section-title">Actividad reciente</h3>
+<table class="table"><tr><td>Venta #00018<br><small class="muted">Hace 4 min · Efectivo</small></td><td><b>S/ 24.50</b></td></tr>
+<tr><td>Venta #00017<br><small class="muted">Hace 11 min · Yape</small></td><td><b>S/ 42.00</b></td></tr>
+<tr><td>Venta #00016<br><small class="muted">Hace 18 min · Tarjeta</small></td><td><b>S/ 18.90</b></td></tr>
+<tr><td>${state.lastPayment?`Venta #${String(state.sales).padStart(5,"0")}<br><small class="muted">Última prueba · ${state.lastPayment.method}</small>`:`Recepción #R0007<br><small class="muted">Hace 31 min · 28 productos</small>`}</td><td><b>${state.lastPayment?money(state.lastPayment.total):"Compra"}</b></td></tr></table>`)}
+${card(`<h3 class="section-title">Requiere atención</h3>
+<div class="alert d"><strong>Leche Gloria</strong><small>Lote próximo a vencer · 07/09/2026</small></div>
+<div class="alert"><strong>Panetón 900g</strong><small>Stock por debajo del mínimo · 7 unidades</small></div>
+<div class="alert"><strong>Factura F001-234</strong><small>Vence en 2 días · S/ 1,840.00</small></div>
+<div class="alert o"><strong>3 documentos</strong><small>Listos para revisión SUNAT (simulación)</small></div>`)}
+</div>
+<div class="grid cols3" style="margin-top:16px">
+${card(`<h3 class="section-title">Ventas esta semana</h3><div class="chart">${[42,55,48,72,64,86,58].map((x,i)=>`<div class="vbar"><i style="height:${x*1.55}px"></i><span>${["L","M","X","J","V","S","D"][i]}</span></div>`).join("")}</div>`)}
+${card(`<h3 class="section-title">Producto más vendido</h3><div style="font-size:24px;font-weight:900">Leche Gloria 1L</div><p class="muted">38 unidades esta semana</p><div class="bar"><i style="width:78%"></i></div><p class="muted">Rotación alta · sugerencia: revisar reposición</p>`)}
+${card(`<h3 class="section-title">Asistente de voz</h3><p class="muted">Haz una consulta como si estuvieras atendiendo en caja.</p><button class="primary" onclick="voice()">🎙️ Consultar por voz</button><p class="muted" style="font-size:12px">Ejemplo: “¿Cuánto cuesta la leche Gloria?”</p>`)}
+</div>`;
+}
+
+function sell(){
+return shell("Vender","Venta rápida con búsqueda, código de barras y control de vencimiento.",`<button class="secondary" onclick="voice()">🎙️ Consultar</button>`)
++`<div class="pos"><div>
+${card(`<div class="row"><input id="q" class="search" placeholder="Buscar producto o escanear código de barras..." oninput="filterProducts()"><button class="secondary" onclick="scan()">▣</button></div><div class="products" id="productGrid">${productCards(state.products)}</div>`)}
+</div>
+${card(`<div class="between"><h3 class="section-title">Venta actual</h3><span class="pill">${state.cart.length} productos</span></div><div id="cart">${cartHTML()}</div>
+<div class="totals"><div class="between"><span>Subtotal</span><b>${money(cartTotal())}</b></div><div class="between"><span>Descuento</span><b>S/ 0.00</b></div><div class="between total"><span>Total</span><span>${money(cartTotal())}</span></div><button class="primary" style="width:100%;margin-top:5px" onclick="checkout()">Cobrar ${money(cartTotal())}</button></div>`)}
+</div>`;
+}
+function productCards(arr){return arr.map(p=>`<button class="product" onclick="chooseProduct(${p.id})"><div class="name">${p.name}</div><div class="meta">${p.category} · ${p.barcode}</div><div class="between"><span class="price">${money(p.price)}</span><span class="pill ${p.stock<8?'warn':'ok'}">${p.stock} und.</span></div></button>`).join("")||`<div class="empty">No se encontraron productos.</div>`}
+function filterProducts(){const q=document.getElementById("q").value.toLowerCase();document.getElementById("productGrid").innerHTML=productCards(state.products.filter(p=>(p.name+p.barcode+p.category).toLowerCase().includes(q)))}
+function chooseProduct(id){const p=state.products.find(x=>x.id===id);if(p.lots.length>1){openLot(p)}else addCart(p,p.lots[0][0])}
+function openLot(p){modalbox.innerHTML=`<h3>Seleccionar vencimiento</h3><p class="muted">${p.name} · ${p.stock} unidades disponibles</p>${p.lots.map((l,i)=>`<div class="choice" onclick="closeModal();addCartById(${p.id},'${l[0]}')"><span><b>${l[0]}</b><br><small>${l[1]} disponibles</small></span><span>Elegir ›</span></div>`).join("")}<button class="secondary" onclick="closeModal()">Cancelar</button>`;modal.classList.add("show")}
+function addCartById(id,lot){const p=state.products.find(x=>x.id===id);addCart(p,lot)}
+function addCart(p,lot){let x=state.cart.find(i=>i.id===p.id&&i.lot===lot);if(x)x.qty++;else state.cart.push({id:p.id,name:p.name,price:p.price,lot,qty:1});toast(`${p.name} agregado a la venta`);render()}
+function cartTotal(){return state.cart.reduce((a,x)=>a+x.price*x.qty,0)}
+function cartHTML(){return state.cart.length?state.cart.map((x,i)=>`<div class="cart-item"><div><b>${x.name}</b><br><small class="muted">Venc. ${x.lot} · ${money(x.price)}</small></div><div class="qty"><button onclick="changeQty(${i},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${i},1)">+</button></div><b>${money(x.price*x.qty)}</b></div>`).join(""):`<div class="empty">Agrega productos para iniciar la venta.</div>`}
+function changeQty(i,d){state.cart[i].qty+=d;if(state.cart[i].qty<=0)state.cart.splice(i,1);render()}
+function checkout(){
+if(!state.cart.length)return toast("Agrega al menos un producto");
+showPaymentMethods();
+}
+function showPaymentMethods(){
+modalbox.innerHTML=`<h3>Seleccionar método de pago</h3>
+<p class="muted">Total de la venta: <b style="font-size:24px;color:var(--ink)">${money(cartTotal())}</b></p>
+<div class="grid" style="gap:8px">
+<button class="choice" onclick="payMethod('Efectivo')"><span>💵 <b>Efectivo</b><br><small>Indicar cuánto recibió el cajero y calcular vuelto</small></span><span>›</span></button>
+<button class="choice" onclick="payMethod('Yape / Plin · QR')"><span>📱 <b>QR · Yape / Plin</b><br><small>Mostrar QR y esperar confirmación</small></span><span>›</span></button>
+<button class="choice" onclick="payMethod('Tarjeta · Izipay')"><span>💳 <b>Tarjeta · POS Izipay</b><br><small>Enviar el importe al terminal y esperar resultado</small></span><span>›</span></button>
+<button class="choice" onclick="payMethod('Mixto')"><span>↔ <b>Pago mixto</b><br><small>Combinar efectivo con QR o tarjeta</small></span><span>›</span></button>
+</div>
+<div class="alert o" style="margin-top:12px"><b>La venta aún NO está registrada</b><br><small>Primero se selecciona el método y se completa/valida el pago. Después se confirma la venta.</small></div>
+<button class="secondary" onclick="closeModal()">Cancelar</button>`;
+modal.classList.add("show")
+}
+function payMethod(method){
+if(method==="Efectivo"){
+modalbox.innerHTML=`<h3>💵 Pago en efectivo</h3>
+<p>Total a cobrar: <b style="font-size:24px">${money(cartTotal())}</b></p>
+<div class="field"><label>¿Cuánto recibió el cajero?</label><input id="cashReceived" type="number" min="0" step="0.10" placeholder="Ej. 50.00" oninput="calcChange()" autofocus></div>
+<div class="choice" style="margin-top:12px"><span>Vuelto</span><b id="change">S/ 0.00</b></div>
+<div id="cashError" class="alert d" style="display:none">El monto recibido es menor que el total.</div>
+<div class="row" style="justify-content:flex-end;margin-top:15px">
+<button class="secondary" onclick="showPaymentMethods()">Atrás</button>
+<button class="primary" onclick="confirmCash()">Confirmar pago y registrar venta</button>
+</div>
+<p class="muted" style="font-size:12px">El sistema no debe registrar la venta hasta confirmar que el efectivo recibido cubre el total.</p>`;
+modal.classList.add("show");
+setTimeout(()=>document.getElementById("cashReceived")?.focus(),50);
+calcChange();
+}
+else if(method==="Yape / Plin · QR"){
+modalbox.innerHTML=`<h3>📱 Pago por QR · Yape / Plin</h3>
+<p>Total a cobrar: <b style="font-size:24px">${money(cartTotal())}</b></p>
+<div style="border:2px dashed #cbd5ea;border-radius:14px;padding:35px;text-align:center;margin:12px 0;font-size:42px">▦<br><small style="font-size:12px;color:var(--muted)">QR SIMULADO</small></div>
+<div class="alert"><b>Esperando confirmación del pago</b><br><small>En la versión final, la venta se cerrará cuando la integración devuelva el pago aprobado.</small></div>
+<div class="row" style="justify-content:flex-end">
+<button class="secondary" onclick="showPaymentMethods()">Atrás</button>
+<button class="primary" onclick="finishSale('QR · Yape / Plin')">Simular pago aprobado</button>
+</div>`;
+modal.classList.add("show");
+}
+else if(method==="Tarjeta · Izipay"){
+modalbox.innerHTML=`<h3>💳 Pago con tarjeta · POS Izipay</h3>
+<p>Total a enviar al terminal: <b style="font-size:24px">${money(cartTotal())}</b></p>
+<div class="choice"><span><b>POS Izipay</b><br><small>Terminal del comercio</small></span><span class="pill ok">DEMO</span></div>
+<div class="alert"><b>Flujo previsto</b><br><small>MinimarketPro envía el monto → el cliente paga en el POS → Izipay devuelve aprobado/rechazado → recién entonces se registra la venta.</small></div>
+<div class="row" style="justify-content:flex-end">
+<button class="secondary" onclick="showPaymentMethods()">Atrás</button>
+<button class="primary" onclick="finishSale('Tarjeta · Izipay')">Simular tarjeta aprobada</button>
+</div>`;
+modal.classList.add("show");
+}
+else{
+const half=(cartTotal()/2).toFixed(2);
+modalbox.innerHTML=`<h3>↔ Pago mixto</h3>
+<p>Total de la venta: <b style="font-size:24px">${money(cartTotal())}</b></p>
+<div class="formgrid">
+<div class="field"><label>Parte en efectivo</label><input id="mixedCash" type="number" min="0" step="0.10" value="${half}" oninput="calcMixed()"></div>
+<div class="field"><label>Parte electrónica</label><input id="mixedDigital" type="number" min="0" step="0.10" value="${half}" oninput="calcMixed()"></div>
+</div>
+<div class="choice" style="margin-top:12px"><span>Total ingresado</span><b id="mixedSum">${money(cartTotal())}</b></div>
+<div class="choice"><span>Diferencia</span><b id="mixedDiff">S/ 0.00</b></div>
+<div id="mixedError" class="alert d" style="display:none">Los importes deben sumar exactamente el total de la venta.</div>
+<div class="row" style="justify-content:flex-end;margin-top:15px">
+<button class="secondary" onclick="showPaymentMethods()">Atrás</button>
+<button class="primary" onclick="confirmMixed()">Confirmar pago y registrar venta</button>
+</div>`;
+modal.classList.add("show");
+calcMixed();
+}
+}
+function calcChange(){
+const el=document.getElementById("cashReceived");
+const out=document.getElementById("change");
+const err=document.getElementById("cashError");
+if(el&&out){
+const received=parseFloat(el.value||0);
+const diff=received-cartTotal();
+out.textContent=money(Math.max(0,diff));
+if(err)err.style.display=(el.value!=="" && diff<0)?"block":"none";
+}}
+function confirmCash(){
+const el=document.getElementById("cashReceived");
+const received=parseFloat(el?.value||0);
+if(!Number.isFinite(received)||received<cartTotal()){
+toast("El efectivo recibido no cubre el total");
+return;
+}
+finishSale('Efectivo');
+}
+function calcMixed(){
+const a=parseFloat(document.getElementById("mixedCash")?.value||0);
+const b=parseFloat(document.getElementById("mixedDigital")?.value||0);
+const sum=a+b, diff=sum-cartTotal();
+const s=document.getElementById("mixedSum"), d=document.getElementById("mixedDiff"), e=document.getElementById("mixedError");
+if(s)s.textContent=money(sum);
+if(d)d.textContent=money(Math.abs(diff));
+if(e)e.style.display=Math.abs(diff)>0.009?"block":"none";
+}
+function confirmMixed(){
+const a=parseFloat(document.getElementById("mixedCash")?.value||0);
+const b=parseFloat(document.getElementById("mixedDigital")?.value||0);
+if(!Number.isFinite(a)||!Number.isFinite(b)||Math.abs((a+b)-cartTotal())>0.009){
+toast("El pago mixto debe sumar exactamente el total");
+return;
+}
+finishSale('Mixto · efectivo + electrónico');
+}
+
+function finishSale(method){
+if(!state.cart.length){toast("No hay productos en la venta");return;}
+const total=cartTotal();
+const items=state.cart.map(x=>({name:x.name,qty:x.qty,lot:x.lot}));
+let insufficient=false;
+for(const item of state.cart){
+  const p=state.products.find(x=>x.id===item.id);
+  const lot=p?.lots.find(l=>l[0]===item.lot);
+  if(!p||!lot||lot[1]<item.qty){insufficient=true;break;}
+}
+if(insufficient){
+  toast("No hay stock suficiente en el lote seleccionado");
+  return;
+}
+for(const item of state.cart){
+  const p=state.products.find(x=>x.id===item.id);
+  const lot=p.lots.find(l=>l[0]===item.lot);
+  lot[1]-=item.qty;
+  p.stock-=item.qty;
+}
+state.sales++;
+state.lastPayment={method,total,items,time:new Date().toLocaleTimeString("es-PE",{hour:"2-digit",minute:"2-digit"})};
+state.cart=[];
+closeModal();
+toast(`Pago confirmado · ${method} · ${money(total)} · Venta registrada`);
+setPage("inicio");
+}
+
+function scan(){const p=state.products[0];toast("Escáner demo: código detectado");chooseProduct(p.id)}
+function voice(){modalbox.innerHTML=`<h3>🎙️ Asistente de MinimarketPro</h3><p class="muted">Modo demo de consulta por voz.</p><div class="choice"><span><b>“¿Cuánto cuesta la leche Gloria?”</b><br><small>Resultado: Leche Gloria 1L · S/ 4.90</small></span><button class="secondary" onclick="closeModal()">OK</button></div><div class="choice"><span><b>“¿Qué productos están por vencer?”</b><br><small>2 lotes requieren revisión esta semana.</small></span><button class="secondary" onclick="closeModal()">OK</button></div><p class="muted">En la versión final se conectará a reconocimiento de voz.</p>`;modal.classList.add("show")}
+
+function products(){
+return shell("Productos","Catálogo, precios, códigos de barras y reglas de venta.",`<button class="primary" onclick="newProduct()">+ Nuevo producto</button>`)
++card(`<div class="between"><input class="search" style="max-width:520px" placeholder="Buscar por nombre, código o categoría..." oninput="productTable(this.value)"><span class="pill ok">${state.products.length} productos demo</span></div><div id="ptable" style="margin-top:14px">${productTable("")}</div>`);
+}
+function productTable(q){q=(q||"").toLowerCase();let a=state.products.filter(p=>(p.name+p.barcode+p.category).toLowerCase().includes(q));return `<table class="table"><thead><tr><th>Producto</th><th>Código</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody>${a.map(p=>`<tr><td><b>${p.name}</b></td><td>${p.barcode}</td><td>${p.category}</td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="pill ${p.stock<8?'warn':'ok'}">${p.stock<8?'Reponer':'Disponible'}</span></td><td><button class="secondary" onclick="editProduct(${p.id})">Ver</button></td></tr>`).join("")}</tbody></table>`}
+function newProduct(){modalbox.innerHTML=`<h3>Nuevo producto — demo</h3><div class="formgrid"><div class="field"><label>Código de barras</label><input value="7750000000000"></div><div class="field"><label>Nombre</label><input value="Producto de prueba"></div><div class="field"><label>Precio de venta</label><input value="5.90"></div><div class="field"><label>Categoría</label><input value="Abarrotes"></div></div><div class="row" style="justify-content:flex-end;margin-top:16px"><button class="secondary" onclick="closeModal()">Cancelar</button><button class="primary" onclick="closeModal();toast('Producto creado en modo demo')">Guardar</button></div>`;modal.classList.add("show")}
+function editProduct(id){const p=state.products.find(x=>x.id===id);modalbox.innerHTML=`<h3>${p.name}</h3><div class="feature"><div><b>Precio</b>${money(p.price)}</div><div><b>Stock</b>${p.stock} unidades</div><div><b>Código</b>${p.barcode}</div><div><b>Categoría</b>${p.category}</div></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><b>Lotes y vencimientos</b>${p.lots.map(l=>`<div class="choice"><span>${l[0]}</span><b>${l[1]} und.</b></div>`).join("")}<button class="secondary" onclick="closeModal()">Cerrar</button>`;modal.classList.add("show")}
+
+function inventory(){
+return shell("Inventario","Control de existencias por producto, lote y vencimiento.",`<button class="secondary" onclick="toast('Conteo físico iniciado (demo)')">▣ Conteo físico</button>`)
++`<div class="grid cols3">${card(`<h3 class="section-title">Stock crítico</h3><div style="font-size:28px;font-weight:900">3</div><p class="muted">Productos debajo del mínimo</p>`)}${card(`<h3 class="section-title">Por vencer</h3><div style="font-size:28px;font-weight:900">2</div><p class="muted">Lotes en los próximos días</p>`)}${card(`<h3 class="section-title">Valor estimado</h3><div style="font-size:28px;font-weight:900">S/ 8,460</div><p class="muted">Costo de inventario demo</p>`)}</div>
+${card(`<h3 class="section-title" style="margin-top:4px">Lotes y vencimientos</h3><table class="table"><tr><th>Producto</th><th>Lote/vencimiento</th><th>Cantidad</th><th>Costo</th><th>Estado</th><th></th></tr>${state.products.flatMap(p=>p.lots.map(l=>`<tr><td><b>${p.name}</b><br><small class="muted">${p.barcode}</small></td><td>${l[0]}</td><td>${l[1]}</td><td>${money(p.price*.72)}</td><td><span class="pill ${l[0]==='07/09/2026'?'bad':l[1]<8?'warn':'ok'}">${l[0]==='07/09/2026'?'Próximo a vencer':'Controlado'}</span></td><td><button class="secondary" onclick="toast('Movimiento de inventario abierto')">Ver</button></td></tr>`)).join("")}</table>`)}`;
+}
+
+function purchases(){
+return shell("Compras y recepción","Recibe mercadería, registra lotes y prepara cuentas por pagar.",`<button class="primary" onclick="newPurchase()">+ Nueva recepción</button>`)
++`<div class="grid cols2">${card(`<h3 class="section-title">Nueva recepción inteligente</h3><p class="muted">Carga una factura o boleta y el sistema propone proveedor, productos, cantidades, costos, IGV y lotes.</p><div class="feature"><div><b>📷 OCR</b>Extrae datos de la imagen</div><div><b>🔎 Coincidencias</b>Barra, código proveedor y nombre</div><div><b>📦 Lotes</b>Registra vencimiento y costo</div><div><b>✓ Confirmación</b>Inventario solo cambia al confirmar</div></div><button class="primary" style="margin-top:14px" onclick="newPurchase()">Probar recepción</button>`)}
+${card(`<h3 class="section-title">Últimas recepciones</h3><table class="table"><tr><th>Documento</th><th>Proveedor</th><th>Fecha</th><th>Estado</th></tr><tr><td>F001-991</td><td>Distribuidora Andina</td><td>06/09/2026</td><td><span class="pill ok">Confirmada</span></td></tr><tr><td>F001-992</td><td>Comercial La Central</td><td>05/09/2026</td><td><span class="pill warn">Revisar</span></td></tr></table>`)}
+</div>`;
+}
+function newPurchase(){modalbox.innerHTML=`<h3>📷 Recepción de compra — simulación</h3><p class="muted">Aquí el dueño puede probar el flujo que tendrá el sistema final.</p><div class="choice"><span><b>1. Cargar documento</b><br><small>Factura F001-993 · imagen simulada</small></span><span class="pill ok">OCR 97%</span></div><div class="choice"><span><b>2. Proveedor detectado</b><br><small>Distribuidora Andina S.A.C. · RUC 20601234567</small></span><span>✓</span></div><div class="choice"><span><b>3. Productos encontrados</b><br><small>6 productos · 48 unidades · 2 lotes</small></span><span>✓</span></div><div class="choice"><span><b>4. Confirmar</b><br><small>Actualiza inventario y cuenta por pagar</small></span><button class="primary" onclick="closeModal();toast('Recepción confirmada · inventario actualizado (demo)')">Confirmar</button></div><button class="secondary" onclick="closeModal()">Cerrar</button>`;modal.classList.add("show")}
+
+function suppliers(){
+return shell("Proveedores","Contactos, compras, deuda y medios de pago.",`<button class="primary" onclick="toast('Nuevo proveedor: formulario demo')">+ Nuevo proveedor</button>`)
++`<div class="grid cols3">${state.suppliers.map(s=>card(`<h3 class="section-title">${s.name}</h3><p class="muted">RUC ${s.ruc}</p><p>☎ ${s.phone}</p><div class="between"><b>Por pagar</b><b>${money(s.debt)}</b></div><button class="secondary" style="margin-top:12px" onclick="supplierDetail('${s.name}')">Ver ficha</button>`)).join("")}</div>`;
+}
+function supplierDetail(n){const s=state.suppliers.find(x=>x.name===n);modalbox.innerHTML=`<h3>${s.name}</h3><div class="feature"><div><b>RUC</b>${s.ruc}</div><div><b>Teléfono</b>${s.phone}</div><div><b>Cuenta</b>**** 4812</div><div><b>Condición</b>30 días</div></div><h4>Historial</h4><p class="muted">12 compras · 3 facturas pagadas · 1 pendiente.</p><button class="secondary" onclick="closeModal()">Cerrar</button>`;modal.classList.add("show")}
+
+function payables(){
+return shell("Cuentas por pagar","Controla facturas pendientes y registra pagos sin perder el historial.",`<button class="secondary" onclick="toast('Filtro de vencimiento aplicado')">Próximos vencimientos</button>`)
++card(`<div class="grid cols3" style="margin-bottom:15px"><div><span class="muted">Pendiente total</span><h2>S/ 2,460.00</h2></div><div><span class="muted">Vence esta semana</span><h2>1</h2></div><div><span class="muted">Pagado este mes</span><h2>S/ 6,820.00</h2></div></div><table class="table"><tr><th>Proveedor</th><th>Factura</th><th>Vencimiento</th><th>Pendiente</th><th>Estado</th><th></th></tr>${state.payables.map((x,i)=>`<tr><td>${x.supplier}</td><td>${x.invoice}</td><td>${x.due}</td><td><b>${money(x.amount)}</b></td><td><span class="pill warn">${x.status}</span></td><td><button class="primary" onclick="payBill(${i})">Registrar pago</button></td></tr>`).join("")}</table>`);
+}
+function payBill(i){const x=state.payables[i];modalbox.innerHTML=`<h3>Registrar pago</h3><p><b>${x.supplier}</b><br>${x.invoice} · pendiente ${money(x.amount)}</p><div class="formgrid"><div class="field"><label>Método</label><select><option>Transferencia</option><option>Yape</option><option>Efectivo</option></select></div><div class="field"><label>Monto</label><input value="${x.amount.toFixed(2)}"></div><div class="field"><label>Referencia</label><input value="OP-DEMO-0098"></div></div><div class="row" style="justify-content:flex-end;margin-top:15px"><button class="secondary" onclick="closeModal()">Cancelar</button><button class="primary" onclick="state.payables.splice(${i},1);closeModal();toast('Pago registrado y trazable (demo)');render()">Guardar pago</button></div>`;modal.classList.add("show")}
+
+function promotions(){
+return shell("Promociones","Reglas comerciales automáticas para vender más y reducir merma.",`<button class="primary" onclick="toast('Nueva promoción: formulario demo')">+ Nueva promoción</button>`)
++`<div class="grid cols3">${state.promos.map(p=>card(`<h3 class="section-title">${p.name}</h3><p class="muted">Tipo: ${p.type}</p><span class="pill ${p.status==='Activa'?'ok':'warn'}">${p.status}</span><p>Se aplica automáticamente al cumplir las condiciones.</p><button class="secondary" onclick="toast('Regla de promoción abierta')">Configurar</button>`)).join("")}</div>
+${card(`<h3 class="section-title" style="margin-top:4px">Tipos soportados en el sistema</h3><div class="feature"><div><b>2x1 / 3x2</b>Segunda o tercera unidad automática</div><div><b>Descuento</b>Porcentaje o importe</div><div><b>Precio por cantidad</b>Mayorista por volumen</div><div><b>Combo</b>Varios productos en un precio</div><div><b>Horario</b>Activa por días/horas</div><div><b>Liquidación</b>Prioriza productos próximos a vencer</div></div>`)}`
+}
+
+function incidents(){
+return shell("Incidencias","Defectos, productos equivocados, devoluciones al proveedor y seguimiento.",`<button class="primary" onclick="newIncident()">+ Reportar incidencia</button>`)
++card(`<table class="table"><tr><th>Producto</th><th>Lote</th><th>Cantidad</th><th>Motivo</th><th>Estado</th><th></th></tr>${state.incidents.map((x,i)=>`<tr><td><b>${x.product}</b></td><td>${x.lot}</td><td>${x.qty}</td><td>${x.reason}</td><td><span class="pill ${x.status==='Reportada'?'warn':'ok'}">${x.status}</span></td><td><button class="secondary" onclick="toast('Trazabilidad: movimiento e historial abiertos')">Ver</button></td></tr>`).join("")}</table>`);
+}
+function newIncident(){modalbox.innerHTML=`<h3>Reportar incidencia</h3><div class="formgrid"><div class="field"><label>Producto</label><input value="Leche Gloria 1L"></div><div class="field"><label>Lot/Vencimiento</label><input value="07/09/2026"></div><div class="field"><label>Cantidad</label><input value="1"></div><div class="field"><label>Motivo</label><select><option>Envase dañado</option><option>Producto equivocado</option><option>Próximo a vencer</option><option>Otro</option></select></div></div><p class="muted">El demo muestra el flujo sin modificar silenciosamente el stock.</p><button class="primary" onclick="closeModal();toast('Incidencia reportada y trazable')">Reportar</button>`;modal.classList.add("show")}
+
+function reports(){
+return shell("Reportes y estadísticas","Información para decidir qué comprar, qué vender y qué revisar.",`<button class="secondary" onclick="toast('Reporte exportado en modo demo')">↓ Exportar</button>`)
++`<div class="grid cols3">${card(`<h3 class="section-title">Ventas por día</h3><div class="chart">${[35,44,39,62,55,82,61].map((x,i)=>`<div class="vbar"><i style="height:${x*1.7}px"></i><span>${["L","M","X","J","V","S","D"][i]}</span></div>`).join("")}</div>`)}${card(`<h3 class="section-title">Top productos</h3><p><b>1. Leche Gloria</b><br>38 und. <div class="bar"><i style="width:92%"></i></div></p><p><b>2. Inca Kola</b><br>31 und. <div class="bar"><i style="width:76%"></i></div></p><p><b>3. Arroz Costeño</b><br>27 und. <div class="bar"><i style="width:66%"></i></div></p>`)}${card(`<h3 class="section-title">Recomendaciones</h3><div class="alert"><b>Reponer Leche Gloria</b><br><small>Rotación alta + stock próximo a mínimo.</small></div><div class="alert"><b>Revisar Panetón</b><br><small>7 unidades y temporada próxima.</small></div><div class="alert o"><b>Buen margen</b><br><small>Abarrotes muestran mejor margen estimado.</small></div>`)}</div>
+${card(`<h3 class="section-title">Indicadores del negocio</h3><table class="table"><tr><th>Indicador</th><th>Valor</th><th>Lectura</th></tr><tr><td>Ticket promedio</td><td>S/ 26.75</td><td><span class="pill ok">Saludable</span></td></tr><tr><td>Margen bruto estimado</td><td>23.8%</td><td><span class="pill ok">Estable</span></td></tr><tr><td>Hora pico</td><td>18:00–20:00</td><td><span class="pill">Planificar caja</span></td></tr><tr><td>Quiebres de stock</td><td>2</td><td><span class="pill warn">Revisar</span></td></tr></table>`)}`
+}
+
+function migration(){
+return shell("Migración de datos","Trae la información del sistema anterior sin perder control ni trazabilidad.",`<button class="primary" onclick="migrationDemo()">Probar migración</button>`)
++`<div class="grid cols2">${card(`<h3 class="section-title">Importar información</h3><div class="feature"><div><b>CSV / Excel</b>Productos, precios y stock</div><div><b>TXT</b>Archivos delimitados</div><div><b>XML / JSON</b>Documentos estructurados</div><div><b>Conectores</b>Según sistema anterior</div></div><p class="muted">Primero se analiza y valida. No se modifica nada hasta confirmar.</p>`)}
+${card(`<h3 class="section-title">Flujo seguro</h3><p>① Copia de respaldo</p><p>② Mapeo de campos</p><p>③ Limpieza y duplicados</p><p>④ Importación de prueba</p><p>⑤ Conciliación</p><p>⑥ Importación final + reporte</p>`)}
+</div>${card(`<h3 class="section-title" style="margin-top:4px">Ejemplo de equivalencia</h3><table class="table"><tr><th>Sistema anterior</th><th>MinimarketPro</th></tr><tr><td>CODIGO</td><td>barcode</td></tr><tr><td>DESCRIPCION</td><td>name</td></tr><tr><td>PRECIO</td><td>sale_price</td></tr><tr><td>STOCK</td><td>opening_stock</td></tr></table><p class="muted">Si el sistema anterior no tiene lotes/vencimientos, no se inventan datos: se importa el stock inicial y el control por lote empieza con nuevas recepciones.</p>`)}`
+}
+function migrationDemo(){modalbox.innerHTML=`<h3>Simulación de migración</h3><div class="choice"><span>Registros leídos</span><b>1,284</b></div><div class="choice"><span>Reconocidos automáticamente</span><b>1,241</b></div><div class="choice"><span>Requieren revisión</span><b>31</b></div><div class="choice"><span>Duplicados detectados</span><b>12</b></div><div class="choice"><span>Errores bloqueantes</span><b style="color:var(--danger)">0</b></div><button class="primary" onclick="closeModal();toast('Importación de prueba completada · ningún dato real fue modificado')">Cerrar simulación</button>`;modal.classList.add("show")}
+
+function settings(){
+return shell("Configuración","Usuarios, permisos, seguridad, respaldos, integraciones y actualizaciones.")
++`<div class="grid cols2">${card(`<h3 class="section-title">Usuarios y permisos</h3><table class="table"><tr><th>Rol</th><th>Acceso</th></tr><tr><td>Administrador</td><td><span class="pill ok">Completo</span></td></tr><tr><td>Cajero</td><td>Ventas · productos · consultas</td></tr><tr><td>Almacén</td><td>Recepción · lotes · inventario</td></tr><tr><td>Dueño/Gerente</td><td>Reportes · caja · configuración</td></tr></table>`)}
+${card(`<h3 class="section-title">Seguridad y respaldo</h3><div class="alert o"><b>Último respaldo</b><br><small>Hoy · 05:00 · Correcto</small></div><p>✓ Historial de acciones</p><p>✓ Sesión con cierre automático</p><p>✓ Permisos por rol</p><p>✓ Restauración administrada</p><button class="secondary" onclick="toast('Respaldo de prueba generado')">Crear respaldo demo</button>`)}
+${card(`<h3 class="section-title">SUNAT · simulación</h3><p class="muted">Emisión y consulta conectadas al módulo de integración en la arquitectura final.</p><div class="choice"><span>Documentos pendientes</span><b>3</b></div><button class="secondary" onclick="toast('Conector SUNAT: simulación ejecutada')">Probar conexión</button>`)}
+${card(`<h3 class="section-title">Actualizaciones</h3><p>Versión demo: <b>0.3</b></p><p class="muted">La versión comercial tendrá control de versiones, respaldo, migración de BD, verificación y recuperación.</p><button class="secondary" onclick="toast('No hay actualizaciones en este demo')">Buscar actualizaciones</button>`)}
+</div>`;
+}
+
+function differences(){
+return shell("¿Por qué MinimarketPro?","Esta pantalla está pensada para que el dueño pueda comparar el enfoque del sistema.",`<button class="primary" onclick="setPage('vender')">Probar una venta</button>`)
++`<div class="grid cols2">${card(`<h3 class="section-title">Enfoque tradicional</h3><div class="alert"><b>Producto y stock</b><br><small>Stock general, poca trazabilidad por lote.</small></div><div class="alert"><b>Vencimientos</b><br><small>Revisión manual o separada.</small></div><div class="alert"><b>Compras</b><br><small>Digitación repetitiva.</small></div><div class="alert"><b>Incidencias</b><br><small>Se pueden perder entre mensajes o notas.</small></div><div class="alert"><b>Reportes</b><br><small>Datos sin recomendaciones claras.</small></div>`)}
+${card(`<h3 class="section-title">Propuesta MinimarketPro</h3><div class="alert o"><b>Producto + lote + vencimiento</b><br><small>El cajero identifica el producto y selecciona el vencimiento físico correcto.</small></div><div class="alert o"><b>Alertas y FEFO como apoyo</b><br><small>El sistema recomienda qué lote revisar, sin inventar lotes.</small></div><div class="alert o"><b>OCR + confirmación</b><br><small>La factura se convierte en una recepción propuesta antes de actualizar stock.</small></div><div class="alert o"><b>Incidencias trazables</b><br><small>Defecto, devolución, reemplazo y estado quedan registrados.</small></div><div class="alert o"><b>Decisiones</b><br><small>Ventas, rotación, stock crítico y compras sugeridas en un solo lugar.</small></div>`)}
+</div>
+${card(`<h3 class="section-title" style="margin-top:4px">Funciones que el dueño puede explorar en este demo</h3><div class="feature"><div><b>🛒 POS</b>Venta, búsqueda, lotes, vencimientos y pagos.</div><div><b>📦 Inventario</b>Stock por lote y alertas.</div><div><b>🧾 Compras</b>Recepción + OCR simulado.</div><div><b>💳 Cuentas por pagar</b>Facturas y registro de pagos.</div><div><b>🏷️ Promociones</b>2x1, descuentos, combos y liquidación.</div><div><b>⚠️ Incidencias</b>Seguimiento de problemas con proveedores.</div><div><b>📊 Reportes</b>Ventas, top productos y recomendaciones.</div><div><b>🎙️ Voz</b>Consultas rápidas simuladas.</div><div><b>⇄ Migración</b>Importación segura desde el sistema anterior.</div><div><b>🔐 Seguridad</b>Roles, auditoría y respaldos.</div><div><b>☁️ Integraciones</b>SUNAT y pagos preparados por adaptadores.</div><div><b>🔄 Actualizaciones</b>Arquitectura preparada para mantenimiento continuo.</div></div>`)}`
+}
+
+function closeModal(){modal.classList.remove("show")}
+modal.onclick=e=>{if(e.target===modal)closeModal()}
+render();
+</script>
+</body>
+</html>
